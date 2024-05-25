@@ -12,7 +12,7 @@ class Population():
             route = Route()
             route.randomise_destinations()
             self.routes.append(route)
-            route.print_route()
+            #route.print_route()
 
         self.initialised = True
         print(len(self.routes), "random routes added to population")
@@ -22,15 +22,29 @@ class Population():
 
     def get_size(self):
         return len(self.routes)
+    
+    def get_route_at(self, index):
+        return self.routes[index]
 
-    def evaluate_routes(self):
+    def evaluate_and_sort_routes(self):
         print("Evaluating population...")
         assert self.initialised == True, "Tried to evaluate population before initialising it!"
+        assert self.evaluated == False, "Tried to evaluate population more than once!"
+        assert self.sorted == False, "Tried to evaluate population that had somehow been sorted!"
 
         for route in self.routes:
             route.evaluate_route()
         
         self.evaluated = True
+
+        self.sort_routes_by_shortest_distance()
+
+        self.print_all_routes()
+
+    def get_best_subset_of_current_population(self, subset_size):
+        assert self.evaluated == True, "Tried to get subset of population before they'd been evaluated!"
+        assert self.sorted == True, "Tried to get subset of population before they'd been sorted!"
+        return self.routes[:subset_size]
 
     def get_best_route(self) -> Route:
         if not self.sorted:
@@ -42,17 +56,21 @@ class Population():
         assert self.evaluated == True, "Tried to sort routes before they'd been evaluated!"
         assert self.sorted == False, "Tried to sort routes when they were already sorted!"
 
-        print ("Routes before sorting:")
-        self.print_all_routes()
+        print ("Sorting routes")
+        #print ("Routes before sorting:")
+        #self.print_all_routes()
 
         self.routes.sort(key=lambda route: route.get_total_distance())
         self.sorted = True
 
-        print ("Routes sorted by shortest distance:")
-        self.print_all_routes()
+        #print ("Routes sorted by shortest distance:")
+        #self.print_all_routes()
+
+    def get_route_count(self):
+        return len(self.routes)
 
     def print_all_routes(self):
-        print ("There are", len(self.routes), "routes!")
+        print ("There are", len(self.routes), "routes:")
         for route in self.routes:
-            route.print_route()
+            route.print_route("")
 
