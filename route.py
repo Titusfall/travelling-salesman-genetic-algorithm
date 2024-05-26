@@ -25,9 +25,9 @@ class Route():
                 distance = get_distance(self.destinations[i], self.destinations[i+1])
             self.total_distance += distance
 
-    def mutate(self):
+    def mutate(self, bias_towards_switching_neighbours):
         # 50/50 chance of either switching two neighbours, or moving one destination to a random other point in the route
-        if random.random() < 0.5:
+        if random.random() < bias_towards_switching_neighbours:
             self.mutate_by_switching_two_neighbouring_destinations()
         else:
             self.mutate_by_moving_a_destination_elsewhere()

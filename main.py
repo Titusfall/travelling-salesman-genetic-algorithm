@@ -60,7 +60,7 @@ def evolve_new_population(current_population):
         child_route = spawn_from_parents(parent_route_1, parent_route_2)
 
         if random.random() < config.MUTATION_RATE:
-            child_route.mutate()
+            child_route.mutate(config.BIAS_TOWARDS_SWITCHING_NEIGHBOURS)
 
         new_population.add_route(child_route)
 
