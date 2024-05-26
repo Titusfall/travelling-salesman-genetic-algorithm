@@ -17,6 +17,7 @@ def display_as_graph(route):
     dest_xs.append(dest_xs[0])
     dest_ys.append(dest_ys[0])
 
+    # Stretch the graph vertically to mirror the x2 scale factor in the data
     plt.figure(figsize=(3, 6))
 
     plt.scatter(dest_xs, dest_ys, color='blue', label='Places')
