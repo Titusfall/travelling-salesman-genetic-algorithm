@@ -60,7 +60,14 @@ def evolve_new_population(current_population):
         child_route = spawn_from_parents(parent_route_1, parent_route_2)
 
         if random.random() < config.MUTATION_RATE:
+            # Perform at least one mutation
             child_route.mutate(config.BIAS_TOWARDS_SWITCHING_NEIGHBOURS)
+
+            # Diminishing chance of additional mutations, to get us out of local minimums
+            chance_of_another_mutation = 0.5
+
+            while (random.random() < chance_of_another_mutation):
+                child_route.mutate(config.BIAS_TOWARDS_SWITCHING_NEIGHBOURS)
 
         new_population.add_route(child_route)
 
@@ -72,7 +79,7 @@ def get_best_subset_of_current_population(current_population):
     assert config.PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE <= 1 and config.PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE > 0, "PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE in the config file must be between 0 and 1!"
     
     size_of_subset_that_can_reproduce = int(config.POPULATION_SIZE * config.PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE)
-    assert size_of_subset_that_can_reproduce >= 2, "Invalid config settings - reproduction population too small!"
+    assert size_of_subset_that_can_reproduce >= 1, "Invalid config settings - reproduction population too small!"
 
     best_subset_of_current_population = current_population.get_best_subset_of_current_population(size_of_subset_that_can_reproduce)
     
