@@ -1,4 +1,3 @@
-
 from data import get_copy_of_destinations_list, get_distance
 import random
 
@@ -26,10 +25,42 @@ class Route():
                 distance = get_distance(self.destinations[i], self.destinations[i+1])
             self.total_distance += distance
 
-        #print ("Total distance of this route is", self.total_distance)
-
     def mutate(self):
-        print ("Mutating... TODO")
+        # 50/50 chance of either mutating two neighbours or any two
+        if random.random() < 0.5:
+            index1, index2 = self.pick_two_neighbouring_destinations_at_random()
+        else:
+            index1, index2 = self.pick_two_unique_destinations_at_random()
+
+        temp = self.destinations[index1]
+        self.destinations[index1] = self.destinations[index2]
+        self.destinations[index2] = temp
+
+    def pick_two_neighbouring_destinations_at_random(self):
+        index1 = self.pick_random_destination_index_not_this_one(None)
+        if (index1 == 0):
+            index2 = len(self.destinations) - 1
+        else:
+            index2 = index1 - 1
+        return index1, index2
+    
+    def pick_two_unique_destinations_at_random(self):
+        index1 = self.pick_random_destination_index_not_this_one(None)
+        index2 = self.pick_random_destination_index_not_this_one(index1)
+        return index1, index2
+    
+    def pick_random_destination_index_not_this_one(self, index_to_exclude):
+        assert len(self.destinations) > 1, "Not enough destinations!"
+
+        index = self.pick_random_destination_index()
+        while index == index_to_exclude:
+            index = self.pick_random_destination_index()
+
+        return index
+    
+    def pick_random_destination_index(self):
+        index = random.randint(0, len(self.destinations) - 1)
+        return index
 
     def get_total_distance(self):
         assert self.total_distance is not None, "get_total_distance() called before route evaluated!"
@@ -58,28 +89,25 @@ class Route():
 
         print (message)
 
+
+# Not part of the class
+
 def spawn_from_parents(parent_route_1, parent_route_2):
     number_of_routes = parent_route_1.get_length()
     assert parent_route_2.get_length() == number_of_routes, "Parent routes are different lengths!"
 
-    parent_route_1.print_route("Parent 1 is:")
-    parent_route_2.print_route("Parent 2 is:")
-
     midpoint = random.randint(0, number_of_routes)
-    #print ("Splitting parent routes at midpoint", midpoint)
-
+    
     child_route = Route()
 
     # For the first half, we just copy the destinations from parent1 to the midpoint
     for i in range(midpoint):
-        #print("Appending to child from parent 1 at position", i)
         child_route.destinations.append(parent_route_1.get_destination_at(i))        
 
     # For the second half, we can't just copy the parent2 destinations from the midpoint to the end because
     # then some destinations will be duplicated and some missed out. So instead we go through all of parent2
     # and just add those we haven't added yet
     for i in range(number_of_routes):
-        #print("Appending to child from parent 2 at position", i)
         dest_in_parent2 = parent_route_2.get_destination_at(i)
 
         if dest_in_parent2 not in child_route.destinations:
@@ -87,8 +115,6 @@ def spawn_from_parents(parent_route_1, parent_route_2):
 
     assert child_route.get_length() == number_of_routes, "Child route is a different length!"
 
-    child_route.print_route("Child is:")
-    
     return child_route
 
 

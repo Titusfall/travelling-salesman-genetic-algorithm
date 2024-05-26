@@ -20,15 +20,15 @@ def main():
     current_population.evaluate_and_sort_routes()
 
     for generation in range(1, config.GENERATIONS):
-        print("Evolving generation", generation)
+        #print("Evolving generation", generation)
         new_population = evolve_new_population(current_population)
 
         new_population.evaluate_and_sort_routes()
 
         best_route = new_population.get_best_route()
-        print(best_route.print_route("The best route is:"))
+        best_route.print_route(f"Generation {generation}'s best route is:")
 
-        print("Replacing the old population with the new one.")
+        #print("Replacing the old population with the new one.")
         current_population = new_population
 
     # Say how long it took

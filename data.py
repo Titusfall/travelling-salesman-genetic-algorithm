@@ -41,8 +41,7 @@ def calculate_distances():
                 distance = 0
             else:    
                 distance = calculate_distance(dest1.x, dest1.y, dest2.x, dest2.y)
-                #print("Distance between", dest1.name, "at", dest1.x, dest1.y, "and", dest2.name, "at", dest2.x, dest2.y, "is", distance)
-
+                
             key = (dest1.id, dest2.id)
             distances[key] = distance
 

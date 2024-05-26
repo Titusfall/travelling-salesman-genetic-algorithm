@@ -12,8 +12,7 @@ class Population():
             route = Route()
             route.randomise_destinations()
             self.routes.append(route)
-            #route.print_route()
-
+            
         self.initialised = True
         print(len(self.routes), "random routes added to population")
 
@@ -27,7 +26,6 @@ class Population():
         return self.routes[index]
 
     def evaluate_and_sort_routes(self):
-        print("Evaluating population...")
         assert self.initialised == True, "Tried to evaluate population before initialising it!"
         assert self.evaluated == False, "Tried to evaluate population more than once!"
         assert self.sorted == False, "Tried to evaluate population that had somehow been sorted!"
@@ -38,8 +36,6 @@ class Population():
         self.evaluated = True
 
         self.sort_routes_by_shortest_distance()
-
-        self.print_all_routes()
 
     def get_best_subset_of_current_population(self, subset_size):
         assert self.evaluated == True, "Tried to get subset of population before they'd been evaluated!"
@@ -56,15 +52,8 @@ class Population():
         assert self.evaluated == True, "Tried to sort routes before they'd been evaluated!"
         assert self.sorted == False, "Tried to sort routes when they were already sorted!"
 
-        print ("Sorting routes")
-        #print ("Routes before sorting:")
-        #self.print_all_routes()
-
         self.routes.sort(key=lambda route: route.get_total_distance())
         self.sorted = True
-
-        #print ("Routes sorted by shortest distance:")
-        #self.print_all_routes()
 
     def get_route_count(self):
         return len(self.routes)
