@@ -1,6 +1,7 @@
 from data import initialise_destinations_data
 from population import Population
 from route import spawn_from_parents
+from visualisation import display_as_graph
 import config
 import time
 import random
@@ -35,6 +36,8 @@ def main():
     elapsed_time = end_time - start_time
     minutes, seconds = divmod(int(elapsed_time), 60)
     print("Finished in", minutes, "minutes and", seconds, "seconds.")
+
+    display_as_graph(best_route)
 
 def evolve_new_population(current_population):
     quickest_routes_in_current_population = get_best_subset_of_current_population(current_population)

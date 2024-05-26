@@ -13,7 +13,7 @@ class Route():
 
     def set_destinations(self, destinations) -> None:
         self.destinations = destinations
-        
+
     def evaluate_route(self) -> None:
         self.total_distance = 0.0
 
