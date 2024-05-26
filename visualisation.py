@@ -27,8 +27,11 @@ def display_as_graph(route):
     for i in range(number_of_unique_places):
         plt.text(dest_xs[i], dest_ys[i], dest_names[i], fontsize=8, ha='right')
 
+    plt.xticks([])
+    plt.yticks([])
+
     plt.plot(dest_xs, dest_ys, color='red', linestyle='-', linewidth=2)
 
-    plt.title('Shortest Route by Genetic Algorithm')
+    #plt.title('Shortest Route by Genetic Algorithm')
 
     plt.show()
