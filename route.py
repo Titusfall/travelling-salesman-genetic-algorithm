@@ -26,15 +26,24 @@ class Route():
             self.total_distance += distance
 
     def mutate(self):
-        # 50/50 chance of either mutating two neighbours or any two
+        # 50/50 chance of either switching two neighbours, or moving one destination to a random other point in the route
         if random.random() < 0.5:
-            index1, index2 = self.pick_two_neighbouring_destinations_at_random()
+            self.mutate_by_switching_two_neighbouring_destinations()
         else:
-            index1, index2 = self.pick_two_unique_destinations_at_random()
+            self.mutate_by_moving_a_destination_elsewhere()
 
+    def mutate_by_switching_two_neighbouring_destinations(self):
+        index1, index2 = self.pick_two_neighbouring_destinations_at_random()
         temp = self.destinations[index1]
         self.destinations[index1] = self.destinations[index2]
         self.destinations[index2] = temp
+
+    def mutate_by_moving_a_destination_elsewhere(self):
+        extraction_point = self.pick_random_destination_index()
+        insertion_point = self.pick_random_destination_index_not_this_one(extraction_point)
+
+        dest_moving = self.destinations.pop(extraction_point)
+        self.destinations.insert(insertion_point, dest_moving)
 
     def pick_two_neighbouring_destinations_at_random(self):
         index1 = self.pick_random_destination_index_not_this_one(None)

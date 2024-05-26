@@ -18,7 +18,9 @@ def main():
     current_population = Population()
     current_population.initialise_with_random_routes(config.POPULATION_SIZE)
     current_population.evaluate_and_sort_routes()
-
+    quickest_so_far = None
+    gen_reached_optimum = None
+    
     for generation in range(1, config.GENERATIONS):
         #print("Evolving generation", generation)
         new_population = evolve_new_population(current_population)
@@ -26,6 +28,12 @@ def main():
         new_population.evaluate_and_sort_routes()
 
         best_route = new_population.get_best_route()
+        quickest_this_gen = best_route.get_total_distance()
+
+        if quickest_so_far is None or quickest_this_gen < quickest_so_far:
+            quickest_so_far = quickest_this_gen
+            gen_reached_optimum = generation
+            
         best_route.print_route(f"Generation {generation}'s best route is:")
 
         #print("Replacing the old population with the new one.")
@@ -35,7 +43,7 @@ def main():
     end_time = time.time()
     elapsed_time = end_time - start_time
     minutes, seconds = divmod(int(elapsed_time), 60)
-    print("Finished in", minutes, "minutes and", seconds, "seconds.")
+    print("Finished in", minutes, "minutes and", seconds, "seconds. Reached optimum solution in generation", gen_reached_optimum)
 
     display_as_graph(best_route)
 
