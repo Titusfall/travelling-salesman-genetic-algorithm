@@ -1,4 +1,4 @@
 POPULATION_SIZE = 1000
-POPULATION_SUBSET_SIZE_THAT_CAN_REPRODUCE = 500 # 3 was super fast
-MUTATION_RATE = 0.1 # 0.2 is about right
-GENERATIONS = 100
+PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE = 0.2 # Changing this has a potent effect. 0.1 tends to get the optimum very fast but can miss it and climb a local hill
+MUTATION_RATE = 0.2 # 0.2 is about optimum
+GENERATIONS = 50

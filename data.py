@@ -8,26 +8,57 @@ distances = {}
 def initialise_destinations_data():
     print("Initialising...")
 
-    add_destination("Cardiff", 4, 12, 0)
-    add_destination("Nottingham", 8, 2, 1)
-    add_destination("London", 2, 0, 2)
-    add_destination("Brighton", 1, 3, 3)
-    add_destination("Edinburgh", 15, 5, 4)
-    add_destination("Leeds", 1, 9, 5)
-    add_destination("Birmingham", 2, 2, 6)
-    add_destination("Bristol", 10, 6, 7)
-    add_destination("Modbury", 0, 3, 8)
-    add_destination("Plymouth", 5, 4, 9)
-    add_destination("Newcastle", 11, 6, 10)
-    add_destination("Derby", 6, 7, 11)
-    add_destination("Glasgow", 7, 5, 12)
-    add_destination("Swansea", 9, 5, 13)
-    add_destination("Dublin", 3, 9, 14)
-    add_destination("Exeter", 10, 1, 15)
-    add_destination("York", 8, 9, 16)
-    add_destination("Liverpool", 6, 0, 17)
+    # London is longitude (x axis) -0.12 and latitude (y axis) 51.5
+
+    # It turns out that latitude and longitude aren't equal. If you treat them as equal and plot the UK cities on a grid, it squishes them
+    # vertically. Stretching the display graph at the end wouldn't fix this, because it also affects the distances calculated. So we
+    # achieve a more accurate representation by scaling one of the numbers when first inputting data.
+    scale_factor = 2
+
+    add_destination("Aberdeen", -2.0943, 57.1497 * scale_factor, 0)
+    add_destination("Belfast", -5.9301, 54.5973 * scale_factor, 1)
+    add_destination("Birmingham", -1.8904, 52.4862 * scale_factor, 2)
+    add_destination("Bradford", -1.7594, 53.795 * scale_factor, 3)
+    add_destination("Bristol", -2.5879, 51.4545 * scale_factor, 4)
+    add_destination("Cambridge", 0.1218, 52.2053 * scale_factor, 5)
+    add_destination("Cardiff", -3.1791, 51.4816 * scale_factor, 6)
+    add_destination("Coventry", -1.5197, 52.4068 * scale_factor, 7)
+    add_destination("Derby", -1.4746, 52.9225 * scale_factor, 8)
+    add_destination("Dundee", -2.9707, 56.462 * scale_factor, 9)
+    add_destination("Edinburgh", -3.1883, 55.9533 * scale_factor, 10)
+    add_destination("Glasgow", -4.2518, 55.8642 * scale_factor, 11)
+    add_destination("Hull", -0.3274, 53.7676 * scale_factor, 12)
+    add_destination("Leeds", -1.5491, 53.8008 * scale_factor, 13)
+    add_destination("Leicester", -1.1398, 52.6369 * scale_factor, 14)
+    add_destination("Liverpool", -2.9916, 53.4084 * scale_factor, 15)
+    add_destination("London", -0.1278, 51.5074 * scale_factor, 16)
+    add_destination("Manchester", -2.2426, 53.4808 * scale_factor, 17)
+    add_destination("Newcastle", -1.6174, 54.9783 * scale_factor, 18)
+    add_destination("Nottingham", -1.1581, 52.9548 * scale_factor, 19)
+    add_destination("Oxford", -1.2544, 51.7548 * scale_factor, 20)
+    add_destination("Plymouth", -4.1427, 50.3755 * scale_factor, 21)
+    add_destination("Portsmouth", -1.0833, 50.8167 * scale_factor, 22)
+    add_destination("Reading", -0.9781, 51.4543 * scale_factor, 23)
+    add_destination("Sheffield", -1.4701, 53.3811 * scale_factor, 24)
+    add_destination("Southampton", -1.4044, 50.9097 * scale_factor, 25)
+    add_destination("Stoke-on-Trent", -2.1794, 53.0027 * scale_factor, 26)
+    add_destination("Swansea", -3.9436, 51.6214 * scale_factor, 27)
+    add_destination("Wolverhampton", -2.1266, 52.5862 * scale_factor, 28)
+    add_destination("York", -1.0815, 53.959 * scale_factor, 29)
+
+    #validate_scale_factor()
 
     calculate_distances()
+
+def validate_scale_factor():
+    min_lon = min(destinations, key=lambda destination: destination.x).x
+    max_lon = max(destinations, key=lambda destination: destination.x).x
+    min_lat = min(destinations, key=lambda destination: destination.y).y
+    max_lat = max(destinations, key=lambda destination: destination.y).y
+    lon_range = max_lon - min_lon
+    lat_range = max_lat - min_lat
+    print("Lon range is", lon_range, "; Lat range is", lat_range)
+    quit()
 
 def add_destination(name, x, y, id):
     new_destination = Destination(name, x, y, id)

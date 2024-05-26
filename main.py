@@ -33,8 +33,9 @@ def main():
         if quickest_so_far is None or quickest_this_gen < quickest_so_far:
             quickest_so_far = quickest_this_gen
             gen_reached_optimum = generation
-            
-        best_route.print_route(f"Generation {generation}'s best route is:")
+
+        #best_route.print_route(f"Generation {generation}'s best route is:")
+        print(f"Generation {generation}'s best route is {best_route.get_total_distance()}.")
 
         #print("Replacing the old population with the new one.")
         current_population = new_population
@@ -68,11 +69,13 @@ def evolve_new_population(current_population):
     
 def get_best_subset_of_current_population(current_population):
     assert current_population.get_route_count() == config.POPULATION_SIZE, "Unexpected population size!"
-    assert config.POPULATION_SUBSET_SIZE_THAT_CAN_REPRODUCE < config.POPULATION_SIZE, "Population subset size in the config file must be smaller than population size!"
+    assert config.PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE <= 1 and config.PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE > 0, "PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE in the config file must be between 0 and 1!"
     
-    best_subset_of_current_population = current_population.get_best_subset_of_current_population(config.POPULATION_SUBSET_SIZE_THAT_CAN_REPRODUCE)
-    assert len(best_subset_of_current_population) == config.POPULATION_SUBSET_SIZE_THAT_CAN_REPRODUCE, "Unexpected population subset size!"
+    size_of_subset_that_can_reproduce = int(config.POPULATION_SIZE * config.PERCENTAGE_OF_POPULATION_THAT_CAN_REPRODUCE)
+    assert size_of_subset_that_can_reproduce >= 2, "Invalid config settings - reproduction population too small!"
 
+    best_subset_of_current_population = current_population.get_best_subset_of_current_population(size_of_subset_that_can_reproduce)
+    
     return best_subset_of_current_population
 
 if __name__ == "__main__":

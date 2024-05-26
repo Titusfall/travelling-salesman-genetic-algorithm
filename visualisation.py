@@ -17,6 +17,8 @@ def display_as_graph(route):
     dest_xs.append(dest_xs[0])
     dest_ys.append(dest_ys[0])
 
+    plt.figure(figsize=(3, 6))
+
     plt.scatter(dest_xs, dest_ys, color='blue', label='Places')
 
     number_of_unique_places = len(dest_xs) - 1
