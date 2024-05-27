@@ -16,15 +16,6 @@ class Population():
         self.initialised = True
         print(len(self.routes), "random routes added to population")
 
-    def add_route(self, route):
-        self.routes.append(route)
-
-    def get_size(self):
-        return len(self.routes)
-    
-    def get_route_at(self, index):
-        return self.routes[index]
-
     def evaluate_and_sort_routes(self):
         assert self.initialised == True, "Tried to evaluate population before initialising it!"
         assert self.evaluated == False, "Tried to evaluate population more than once!"
@@ -37,17 +28,6 @@ class Population():
 
         self.sort_routes_by_shortest_distance()
 
-    def get_best_subset_of_current_population(self, subset_size):
-        assert self.evaluated == True, "Tried to get subset of population before they'd been evaluated!"
-        assert self.sorted == True, "Tried to get subset of population before they'd been sorted!"
-        return self.routes[:subset_size]
-
-    def get_best_route(self) -> Route:
-        if not self.sorted:
-            self.sort_routes_by_shortest_distance()
-
-        return self.routes[0]
-    
     def sort_routes_by_shortest_distance(self):
         assert self.evaluated == True, "Tried to sort routes before they'd been evaluated!"
         assert self.sorted == False, "Tried to sort routes when they were already sorted!"
@@ -55,6 +35,26 @@ class Population():
         self.routes.sort(key=lambda route: route.get_total_distance())
         self.sorted = True
 
+    def add_route(self, route):
+        self.routes.append(route)
+
+    def get_best_subset_of_current_population(self, subset_size):
+        assert self.evaluated == True, "Tried to get subset of population before they'd been evaluated!"
+        assert self.sorted == True, "Tried to get subset of population before they'd been sorted!"
+        return self.routes[:subset_size]
+
+    def get_size(self):
+        return len(self.routes)
+    
+    def get_route_at(self, index):
+        return self.routes[index]
+
+    def get_best_route(self) -> Route:
+        if not self.sorted:
+            self.sort_routes_by_shortest_distance()
+
+        return self.routes[0]
+    
     def get_route_count(self):
         return len(self.routes)
 

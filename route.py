@@ -6,27 +6,24 @@ class Route():
         self.destinations = []
         self.total_distance = None
 
-    def randomise_destinations(self) -> None:
-        self.destinations = get_copy_of_destinations_list()
-        random.shuffle(self.destinations)
-
-    def set_destinations(self, destinations) -> None:
-        self.destinations = destinations
-
     def evaluate_route(self) -> None:
-        self.total_distance = 0.0
-
-        # Go through the list of destinations, looking up the distance of each step along the route,
+        # The main fitness function. Go through the list of destinations, looking up the distance of each step along the route,
         # including back to the beginning again
+        self.total_distance = 0.0
         for i in range(len(self.destinations)):
             if i == len(self.destinations) - 1:
+                # Get the distance from the last destination back to the start
                 distance = get_distance(self.destinations[i], self.destinations[0])
             else:
+                # Get the distance from this destination to the next one in the route
                 distance = get_distance(self.destinations[i], self.destinations[i+1])
+            
+            # Add it all up
             self.total_distance += distance
 
     def mutate(self, bias_towards_switching_neighbours):
-        # 50/50 chance of either switching two neighbours, or moving one destination to a random other point in the route
+        # There are two mutation methods: either we switch two neighbours at random, or we pick one destination and move it
+        # to a random other point in the route
         if random.random() < bias_towards_switching_neighbours:
             self.mutate_by_switching_two_neighbouring_destinations()
         else:
@@ -64,12 +61,18 @@ class Route():
         index = self.pick_random_destination_index()
         while index == index_to_exclude:
             index = self.pick_random_destination_index()
-
         return index
     
     def pick_random_destination_index(self):
         index = random.randint(0, len(self.destinations) - 1)
         return index
+
+    def randomise_destinations(self) -> None:
+        self.destinations = get_copy_of_destinations_list()
+        random.shuffle(self.destinations)
+
+    def set_destinations(self, destinations) -> None:
+        self.destinations = destinations
 
     def get_total_distance(self):
         assert self.total_distance is not None, "get_total_distance() called before route evaluated!"
@@ -102,27 +105,30 @@ class Route():
 # Not part of the class
 
 def spawn_from_parents(parent_route_1, parent_route_2):
-    number_of_routes = parent_route_1.get_length()
-    assert parent_route_2.get_length() == number_of_routes, "Parent routes are different lengths!"
+    # Note how many destinations there are
+    number_of_destinations = parent_route_1.get_length()
+    assert parent_route_2.get_length() == number_of_destinations, "Parent routes are different lengths!"
 
-    midpoint = random.randint(0, number_of_routes)
+    # Pick a random midpoint
+    midpoint = random.randint(0, number_of_destinations)
     
+    # Create an empty child route
     child_route = Route()
 
-    # For the first half, we just copy the destinations from parent1 to the midpoint
+    # For the first half of the child route, we just copy the destinations from parent 1 up until the midpoint
     for i in range(midpoint):
         child_route.destinations.append(parent_route_1.get_destination_at(i))        
 
-    # For the second half, we can't just copy the parent2 destinations from the midpoint to the end because
-    # then some destinations will be duplicated and some missed out. So instead we go through all of parent2
-    # and just add those we haven't added yet
-    for i in range(number_of_routes):
+    # For the second half, we can't just copy the parent 2 destinations from the midpoint to the end because
+    # then some destinations will be duplicated and some missed out. So instead we go through all of parent 2
+    # and only add those we haven't added yet
+    for i in range(number_of_destinations):
         dest_in_parent2 = parent_route_2.get_destination_at(i)
-
+        
         if dest_in_parent2 not in child_route.destinations:
             child_route.destinations.append(dest_in_parent2)
 
-    assert child_route.get_length() == number_of_routes, "Child route is a different length!"
+    assert child_route.get_length() == number_of_destinations, "Child route is a different length!"
 
     return child_route
 

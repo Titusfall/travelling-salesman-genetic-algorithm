@@ -8,11 +8,14 @@ distances = {}
 def initialise_destinations_data():
     print("Initialising...")
 
-    # London is longitude (x axis) -0.12 and latitude (y axis) 51.5
+    # Example destination: London is longitude (x axis) -0.12 and latitude (y axis) 51.5.
 
-    # It turns out that latitude and longitude aren't equal. If you treat them as equal and plot the UK cities on a grid, it squishes them
-    # vertically. Stretching the display graph at the end wouldn't fix this, because it also affects the distances calculated. So we
-    # achieve a more accurate representation by scaling one of the numbers when first inputting data.
+    # It turns out that latitude and longitude aren't equal, due to the curviture of the Earth and Britain's northern position.
+    # If you look at a map of the UK showing latitude and longitude, the grid squares are approximately twice as tall as they are wide.
+    # If you treat them as equal and plot the UK cities on a grid, it squishes them the result vertically. Stretching the display graph
+    # at the end wouldn't fix this properly, because it also affects the distances calculated. So we achieve a more accurate representation
+    # by scaling the numbers when first inputting data. It's a fudge, but an important one in the UK cities test data.
+    # With real data you wouldn't be calculating absolute distances at all, you'd read in actual distances and none of this would be necessary.
     scale_factor = 2
 
     add_destination("Aberdeen", -2.0943, 57.1497 * scale_factor, 0)
@@ -46,25 +49,17 @@ def initialise_destinations_data():
     add_destination("Wolverhampton", -2.1266, 52.5862 * scale_factor, 28)
     add_destination("York", -1.0815, 53.959 * scale_factor, 29)
 
-    #validate_scale_factor()
-
     calculate_distances()
-
-def validate_scale_factor():
-    min_lon = min(destinations, key=lambda destination: destination.x).x
-    max_lon = max(destinations, key=lambda destination: destination.x).x
-    min_lat = min(destinations, key=lambda destination: destination.y).y
-    max_lat = max(destinations, key=lambda destination: destination.y).y
-    lon_range = max_lon - min_lon
-    lat_range = max_lat - min_lat
-    print("Lon range is", lon_range, "; Lat range is", lat_range)
-    quit()
 
 def add_destination(name, x, y, id):
     new_destination = Destination(name, x, y, id)
     destinations.append(new_destination)
 
 def calculate_distances():
+    # Create a look-up table with the distance between every destination and every other destination,
+    # for efficiency since we'll refer to it a lot. For this test data, just calculate the direct distance
+    # between the two points as if roads weren't a thing. If using real data, it would be much better
+    # to read in actual distance data instead of calculating it.
     for dest1 in destinations:
         for dest2 in destinations:
 
@@ -82,17 +77,16 @@ def calculate_distance(x1, y1, x2, y2):
     distance = math.sqrt(x_diff_squared + y_diff_squared)
     return distance
 
-def get_number_of_destinations():
-    return len(destinations)
-
 def get_copy_of_destinations_list():
     # We can't just return the destinations list because then when we randomise the order it will affect the master list. So make a copy.
-    # Note that we aren't copying the destination items in the list but that's okay because we never change them
+    # Note that we aren't cloning the destination items in the list, but that's okay because we never change them
     destinations_copy = []
     for dest in destinations:
         destinations_copy.append(dest)
     return destinations_copy
 
+def get_number_of_destinations():
+    return len(destinations)
 
 def get_distance(dest1, dest2):
     key = (dest1.id, dest2.id)

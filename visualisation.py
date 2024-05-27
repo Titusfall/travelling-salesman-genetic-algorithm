@@ -3,6 +3,7 @@ import route as Route
 import destination as Destination
 
 def display_as_graph(route):
+    # Use the Matplotlib library to display a graph
     dest_names = []
     dest_xs = []
     dest_ys = []
@@ -27,11 +28,10 @@ def display_as_graph(route):
     for i in range(number_of_unique_places):
         plt.text(dest_xs[i], dest_ys[i], dest_names[i], fontsize=8, ha='right')
 
+    # Don't show the ticks because the numbers aren't useful. 
     plt.xticks([])
     plt.yticks([])
 
     plt.plot(dest_xs, dest_ys, color='red', linestyle='-', linewidth=2)
-
-    #plt.title('Shortest Route by Genetic Algorithm')
 
     plt.show()
