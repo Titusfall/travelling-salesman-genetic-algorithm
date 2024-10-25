@@ -1,6 +1,6 @@
 ## The Travelling Salesman
 
-In 2024, during my year of intensive study, I completed Coursera's excellent series of [Python courses](https://www.coursera.org/specializations/python#courses). For further Python practice, I followed that with a series of projects, and this was my favourite one. It is a genetic algorithm that tackles the classic Travelling Salesman problem.
+In 2024, during my year of intensive study to broaden my tech skills, I completed Coursera's excellent series of [Python courses](https://www.coursera.org/specializations/python#courses) (in one week!) For further Python practice, I followed that with a series of projects, and this was my favourite one. It is a genetic algorithm that tackles the classic Travelling Salesman problem.
 
 ![Route](images/1.png)
 
